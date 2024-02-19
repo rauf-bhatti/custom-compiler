@@ -1,0 +1,15 @@
+ID                   Type             Datatype    Initial Value     Address
+num                   var                 adad                0           0
+c                     var                 adad                0           1
+calculateFib         func                 adad                0           1
+num                   var              unknown                0           2
+num                   var              unknown                0           3
+num                   var              unknown                0           4
+num                   var              unknown                0           5
+num                   var              unknown                0           6
+i                     var                 adad                0           7
+markazi              func                 adad                0          15
+n                     var                 adad                0           8
+pa                    var                 adad                0           9
+t1                    var                 adad                0          10
+n                     var              unknown                1          11

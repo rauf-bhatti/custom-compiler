@@ -1,0 +1,58 @@
+S   -> lines
+lines   -> line ";" lines' {lines.no = lines'.no}
+lines'  -> line ";" lines' | null
+line        -> fun_decl | fun_call | if_stmt | assign_stmt | else_stmt | output_stmt | input_stmt | loop_stmt | return_stmt | func_end
+fun_decl    -> "kaam" id "@" id "(" param_list ")" "karo" lines “kaam khatam”
+
+fun_call    -> chalao id "(" param_list ")" ";" { fun_call.c = param_list1.c; emit("call", id.lex, toString(param_list1.c));
+fun_call.v = param_list.v; }
+param_list  -> null | param param_list' {param_list.v += param.lex + param_list'1.v; param_list.c = param_list'c + param_list.c}
+param_list' -> "||" param param_list' | null {emit("param", param.lex); param_list'.v += param.lex; 
+param_list'.v = null; param_list'.c = 1}
+param       -> id "@" id 
+
+arg_list    -> null | exp arg_list'
+arg_list'   -> "," exp arg_list' | null
+
+if_stmt     -> "agar" "(" exp ")" "to" lines if_stmt’ { emit("if", exp.lex, "goto", lines.no); }
+if_stmt'    -> "warna agar" "(" exp ")" lines “bas karo” | null 
+else_stmt   -> "phir" lines “bas karo”| null
+
+assign_stmt     -> rakho id "@" type assign_op assign_rhs {emit(id.lex, "=", assign_rhs.v); } 
+assign_rhs      -> exp | fun_call {assign_rhs.v = fun_call.v}
+assign_op       -> ":="
+
+output_stmt -> "dekhao" output' {output'1.v = output'.v; emit ("out", "\"", output'1.v, "\""); }
+output'  -> text output'' {output'.v = output''.lex }
+output'' -> "<<" text output'' | null
+
+
+input_stmt  -> "lo" input_rhs {input_rhs'.v = input_rhs.v; {input_stmt.v = input_rhs''.v; emit("in", input_rhs''.v); }
+input_rhs   -> out_stmt in_stmt { out_stmt'.v = out_stmt.v; emit("out", "\"", out_stmt'.v, "\""); 
+input_rhs'v.v = in_stmt.v }
+out_stmt -> "<<" `str` | "<<" id | "<<" num {out_stmt.v = out_stmt.lex; }
+in_stmt -> ">>" id {in_stmt.v = in_stmt.lex; }
+
+
+loop_stmt   -> “jab tak” "(" loop_rhs ")" rel_op id line “bas karo”
+loop_rhs    -> loop_exp loop_rhs’
+loop_rhs’ -> "," loop_rhs | null
+loop_exp   -> "(" exp ")" | exp
+return_stmt -> “wapas” “bhaijo” text {emit ("ret", text.lex)}
+id          -> keyword id'
+id'         -> char id'' | null
+id''        -> alpha id'' | null
+num         -> digit num'
+num'        -> digit num' | null
+add_op      -> "+" | "-"
+mult_op     -> "*" | "/" | “%”
+rel_op      -> "=" | "<>" | "<" | "<=" | ">" | “>="
+factor      -> id "@" id | num | "(" exp “)"
+text        -> factor text' {text.lex = factor.lex + text'.lex}
+text'       -> mult_op factor text' | null
+exp        -> text exp'
+exp'       -> add_op text exp' | null
+char       -> "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
+digit       -> "0" | "1" | ... | "9"
+alpha   -> char | digit
+keyword     -> “dekhao"| "markazi" | “kaam" | "tak" | "jab" | “khatam" | "karo" | "rakho" | "agar" | "to" | "warna" | "phir" |"lo"
