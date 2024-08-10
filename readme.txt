@@ -1,14 +1,8 @@
-- Made a DFA. Some problems regarding how to use set values/grammar was resolved by using Google. 
-- JFlap was failing for RO's. Fixed it by pointing it to a final state. Was stuck on normal state before.
-- Made separate Regular Expressions. After testing, the other challenging part was to combine them into one.
-- Used OR operators and length qualifiers to solve the issue
+This is a compiler written in C++ for a non-standard programming language. An example of the syntax of which is available in sample_code.ru.
+symbol_table.txt would be helpful in observing some of key syntax construct for this language.
 
-CODE:
-Code can be easily ran by bringing bash/terminal to the directory.
-Run "make"
-By running make, all dependencies should compile and an output file a.out should be produced.
-Run this a.out file by specifying the filename of the code.
+This was a personal project done to play with my interest in the fundamentals of compiler construction. Therefore, it is focused more on correctly implementing the various stages of the compilation process rather on efficiency. This project should be taken as a prototype, the ideas of which can be utilised later on.
 
-Some of the problems encountered while writing the code were to correctly handle all the cases. Also, handling cases where if space is taken out between forexample a keyword and a function bracket start. Moreover, efficiently handling the local vector array was also a problem that was addressed. 
-
-Cases of operators were also of concerns and were addressed thoroughly.
+To run this program you will require the GNU compiler. An example format is:
+g++ main.cpp <path_to_source_file> -o <out_file_name>
+./<out_file_name>
